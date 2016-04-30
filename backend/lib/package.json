@@ -1,0 +1,17 @@
+{
+  "name": "discuss-backend",
+  "version": "0.0.1",
+  "description": "The discuss backend API Dependencies",
+  "author": "pmuens",
+  "license": "MIT",
+  "private": false,
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/JustServerless/discuss"
+  },
+  "dependencies": {
+    "aws-sdk": "^2.2.43",
+    "bluebird": "^3.3.4",
+    "graphql": "^0.4.18"
+  }
+}
