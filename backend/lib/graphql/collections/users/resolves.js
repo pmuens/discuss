@@ -38,7 +38,9 @@ module.exports = {
         'id',
         'username',
         'email',
-        'password'
+        'password',
+        'createdAt',
+        'updatedAt'
       ]
     })
       .then(result => {
@@ -62,7 +64,9 @@ module.exports = {
       AttributesToGet: [
         'id',
         'username',
-        'email'
+        'email',
+        'createdAt',
+        'updatedAt'
       ]
     }).then(result => result.Items);
   }
