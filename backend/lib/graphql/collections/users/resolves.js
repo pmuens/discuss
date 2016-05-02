@@ -5,6 +5,7 @@ const uuid = require('uuid');
 const bcryptjs = require('bcryptjs');
 const db = require('../../../dynamodb');
 const authenticate = require('../../../auth').authenticate;
+const decode = require('../../../auth').decode;
 
 const stage = process.env.SERVERLESS_STAGE;
 const projectName = process.env.SERVERLESS_PROJECT;
@@ -31,34 +32,30 @@ module.exports = {
     const email = user.email;
     const password = user.password;
 
-    return db('get', {
+    return db('query', {
       TableName: usersTable,
-      Key: { email },
-      AttributesToGet: [
-        'id',
-        'username',
-        'email',
-        'password',
-        'createdAt',
-        'updatedAt'
-      ]
-    })
-      .then(result => {
-        const Item = result.Item;
-        if (!Item) return Promise.reject('User not found');
+      IndexName: 'emailIndex',
+      KeyConditionExpression: 'email = :email',
+      ProjectionExpression: 'id, username, email, password, createdAt, updatedAt',
+      ExpressionAttributeValues: {
+        ':email': email
+      }
+    }).then(result => {
+      const Item = result.Items[0];
+      if (!Item) return Promise.reject('User not found');
 
-        let match = bcryptjs.compareSync(password, Item.password);
-        if (!match) return Promise.reject('invalid password');
+      let match = bcryptjs.compareSync(password, Item.password);
+      if (!match) return Promise.reject('invalid password');
 
-        delete Item.password;
+      delete Item.password;
 
-        Item.jwt = authenticate(Item);
+      Item.jwt = authenticate(Item);
 
-        return Item;
-      });
+      return Item;
+    });
   },
 
-  index() {
+  getAll() {
     return db('scan', {
       TableName: usersTable,
       AttributesToGet: [
@@ -69,5 +66,49 @@ module.exports = {
         'updatedAt'
       ]
     }).then(result => result.Items);
+  },
+
+  get(id) {
+    return db('get', {
+      TableName: usersTable,
+      Key: { id },
+      ProjectionExpression: 'id, username, email, createdAt, updatedAt'
+    }).then(result => {
+      const Item = result.Item;
+      if (!Item) return Promise.reject('User not found');
+
+      return Item;
+    });
+  },
+
+  updateCurrentUser(user) {
+    let userId = decode(user.jwt).id;
+
+    return db('update', {
+      TableName: usersTable,
+      Key: { id: userId },
+      UpdateExpression: 'SET email = :email, username = :username, password = :password, updatedAt = :updatedAt',
+      ExpressionAttributeValues: {
+        ':email': user.email,
+        ':username': user.username,
+        ':password': bcryptjs.hashSync(user.password, 10),
+        ':updatedAt': String(new Date().getTime())
+      },
+      ReturnValues: 'ALL_NEW'
+    }).then(result => {
+      return result.Attributes;
+    })
+  },
+  
+  deleteCurrentUser(user) {
+    let userId = decode(user.jwt).id;
+
+    return db('delete', {
+      TableName: usersTable,
+      Key: { id: userId },
+      ReturnValues: 'ALL_OLD'
+    }).then(result => {
+      return result.Attributes;
+    });
   }
 };

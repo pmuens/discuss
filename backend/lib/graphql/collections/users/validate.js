@@ -3,6 +3,7 @@
 const Promise = require('bluebird');
 
 let validate = {
+  id: (id) => {},
   email: (email) => {
     let re = /^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/;
     if (!re.test(email)) return Promise.reject('invalid email');

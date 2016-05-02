@@ -30,5 +30,28 @@ module.exports = {
     resolve(source, args) {
       return validate(args).then(() => resolves.signIn(args));
     }
+  },
+  updateCurrentUser: {
+    type: UserType,
+    description: 'Updates the current user',
+    args: {
+      email: { type: new GraphQLNonNull(GraphQLString) },
+      username: { type: new GraphQLNonNull(GraphQLString) },
+      password: { type: new GraphQLNonNull(GraphQLString) },
+      jwt: { type: new GraphQLNonNull(GraphQLString) }
+    },
+    resolve(source, args) {
+      return validate(args).then(() => resolves.updateCurrentUser(args));
+    }
+  },
+  deleteCurrentUser: {
+    type: UserType,
+    description: 'Deletes the current user',
+    args: {
+      jwt: { type: new GraphQLNonNull(GraphQLString) }
+    },
+    resolve(source, args) {
+      return validate(args).then(() => resolves.deleteCurrentUser(args));
+    }
   }
 };

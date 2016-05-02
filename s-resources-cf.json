@@ -46,6 +46,13 @@
                 "*"
               ],
               "Resource": "arn:aws:dynamodb:${region}:*:table/${project}-users-${stage}"
+            },
+            {
+              "Effect": "Allow",
+              "Action": [
+                "*"
+              ],
+              "Resource": "arn:aws:dynamodb:${region}:*:table/${project}-users-${stage}/*/*"
             }
           ]
         },
@@ -60,7 +67,12 @@
       "Type": "AWS::DynamoDB::Table",
       "DeletionPolicy": "Retain",
       "Properties": {
+        "TableName": "${project}-users-${stage}",
         "AttributeDefinitions": [
+          {
+            "AttributeName": "id",
+            "AttributeType": "S"
+          },
           {
             "AttributeName": "email",
             "AttributeType": "S"
@@ -68,7 +80,7 @@
         ],
         "KeySchema": [
           {
-            "AttributeName": "email",
+            "AttributeName": "id",
             "KeyType": "HASH"
           }
         ],
@@ -76,7 +88,24 @@
           "ReadCapacityUnits": 1,
           "WriteCapacityUnits": 1
         },
-        "TableName": "${project}-users-${stage}"
+        "GlobalSecondaryIndexes": [
+          {
+            "IndexName": "emailIndex",
+            "KeySchema": [
+              {
+                "AttributeName": "email",
+                "KeyType": "HASH"
+              }
+            ],
+            "Projection": {
+              "ProjectionType": "ALL"
+            },
+            "ProvisionedThroughput": {
+              "ReadCapacityUnits": 1,
+              "WriteCapacityUnits": 1
+            }
+          }
+        ]
       }
     }
   },
