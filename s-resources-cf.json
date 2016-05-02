@@ -67,6 +67,20 @@
                 "*"
               ],
               "Resource": "arn:aws:dynamodb:${region}:*:table/${project}-posts-${stage}/*/*"
+            },
+            {
+              "Effect": "Allow",
+              "Action": [
+                "*"
+              ],
+              "Resource": "arn:aws:dynamodb:${region}:*:table/${project}-comments-${stage}"
+            },
+            {
+              "Effect": "Allow",
+              "Action": [
+                "*"
+              ],
+              "Resource": "arn:aws:dynamodb:${region}:*:table/${project}-comments-${stage}/*/*"
             }
           ]
         },
@@ -148,6 +162,71 @@
           "WriteCapacityUnits": 1
         },
         "GlobalSecondaryIndexes": [
+          {
+            "IndexName": "userIdIndex",
+            "KeySchema": [
+              {
+                "AttributeName": "userId",
+                "KeyType": "HASH"
+              }
+            ],
+            "Projection": {
+              "ProjectionType": "ALL"
+            },
+            "ProvisionedThroughput": {
+              "ReadCapacityUnits": 1,
+              "WriteCapacityUnits": 1
+            }
+          }
+        ]
+      }
+    },
+    "DynamoDbCommentsTable": {
+      "Type": "AWS::DynamoDB::Table",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "TableName": "${project}-comments-${stage}",
+        "AttributeDefinitions": [
+          {
+            "AttributeName": "id",
+            "AttributeType": "S"
+          },
+          {
+            "AttributeName": "postId",
+            "AttributeType": "S"
+          },
+          {
+            "AttributeName": "userId",
+            "AttributeType": "S"
+          }
+        ],
+        "KeySchema": [
+          {
+            "AttributeName": "id",
+            "KeyType": "HASH"
+          }
+        ],
+        "ProvisionedThroughput": {
+          "ReadCapacityUnits": 1,
+          "WriteCapacityUnits": 1
+        },
+        "GlobalSecondaryIndexes": [
+          {
+            "IndexName": "postIdIndex",
+            "KeySchema": [
+              {
+                "AttributeName": "postId",
+                "KeyType": "HASH"
+              }
+            ],
+            "Projection": {
+              "ProjectionType": "ALL"
+            },
+            "ProvisionedThroughput": {
+              "ReadCapacityUnits": 1,
+              "WriteCapacityUnits": 1
+            }
+          },
           {
             "IndexName": "userIdIndex",
             "KeySchema": [
