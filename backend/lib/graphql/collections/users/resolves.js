@@ -58,13 +58,7 @@ module.exports = {
   getAll() {
     return db('scan', {
       TableName: usersTable,
-      AttributesToGet: [
-        'id',
-        'username',
-        'email',
-        'createdAt',
-        'updatedAt'
-      ]
+      ProjectionExpression: 'id, username, email, createdAt, updatedAt'
     }).then(result => result.Items);
   },
 
