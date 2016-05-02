@@ -14,7 +14,8 @@ const Queries = new GraphQLObjectType({
 });
 
 const collections = [
-  'users'
+  'users',
+  'posts'
 ];
 
 // load collections queries and mutations
