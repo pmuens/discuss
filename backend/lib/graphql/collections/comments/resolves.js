@@ -34,6 +34,20 @@ module.exports = {
     }).then(result => result.Items);
   },
 
+  getAllByPostId(postId) {
+    return db('query', {
+      TableName: commentsTable,
+      IndexName: 'postIdIndex',
+      KeyConditionExpression: 'postId = :postId',
+      ProjectionExpression: 'id, body, postId, userId, createdAt, updatedAt',
+      ExpressionAttributeValues: {
+        ':postId': postId
+      }
+    }).then(result => {
+      return result.Items;
+    });
+  },
+
   get(id) {
     return db('get', {
       TableName: commentsTable,
