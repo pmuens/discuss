@@ -11,14 +11,21 @@ const headerContainerStyles = {
 const brandStyles = {
   fontSize: '20px',
   fontWeight: 'bold',
-  textDecoration: 'none'
+  textDecoration: 'none',
+  display: 'inline-block',
+  marginTop: '10px'
+};
+
+const newPostButtonStyles = {
+  marginBottom: '0px'
 };
 
 const ulStyles = {
   listStyle: 'none',
   padding: '0px',
   float: 'right',
-  margin: '0px'
+  margin: '0px',
+  marginTop: '10px'
 };
 
 const liStyles = {
@@ -43,7 +50,10 @@ class Header extends Component {
               <Link to="/" style={brandStyles}>Discuss</Link>
               <ul style={ulStyles}>
                 {currentUser ? (
-                <li>{currentUser.email} ● <a href='#' onClick={this.handleSignOutClick.bind(this)}>Sign out</a></li>
+                <div>
+                  <li style={liStyles}><Link to="/posts/new" className="button button-primary" style={newPostButtonStyles}>New post</Link></li>
+                  <li style={liStyles}>{currentUser.email} ● <a href='#' onClick={this.handleSignOutClick.bind(this)}>Sign out</a></li>
+                </div>
                 ) :
                   <div>
                     <li style={liStyles}>
