@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { getPosts } from '../../actions/posts';
+import { Link } from 'react-router';
 
 const ulStyles = {
   marginBottom: '10px'
@@ -16,6 +17,10 @@ const titleStyles = {
   fontSize: '20px',
   marginBottom: '0px',
   float: 'left'
+};
+
+const titleLinkStyles = {
+  textDecoration: 'none'
 };
 
 const authorStyles = {
@@ -56,7 +61,7 @@ class PostsIndex extends Component {
               {posts.map((post) => {
                 return (
                   <li key={`post-${post.id}`} style={liStyles}>
-                    <h1 style={titleStyles}>{post.title}</h1>
+                    <h1 style={titleStyles}><Link to={`posts/${post.id}/show`} style={titleLinkStyles}>{post.title}</Link></h1>
                     <span style={authorStyles}>{post.author.username}</span>
                     <div style={clearStyles}></div>
                     <hr style={hrStyles}/>
