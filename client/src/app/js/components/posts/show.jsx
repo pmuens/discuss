@@ -15,8 +15,7 @@ const postLiStyles = {
 
 const postTitleStyles = {
   fontSize: '20px',
-  marginBottom: '0px',
-  float: 'left'
+  marginBottom: '0px'
 };
 
 const postAuthorStyles = {
@@ -37,6 +36,10 @@ const commentLiStyles = {
   padding: '10px',
   marginLeft: '50px',
   listStyle: 'none'
+};
+
+const commentBodyStyles = {
+  margin: '0px'
 };
 
 const commentAuthorStyles = {
@@ -73,10 +76,10 @@ class PostsShow extends Component {
               <ul style={postUlStyles}>
                 <li key={`post-${post.id}`} style={postLiStyles}>
                   <h1 style={postTitleStyles}>{post.title}</h1>
-                  <span style={postAuthorStyles}>{post.author.username}</span>
-                  <div style={clearStyles}></div>
                   <hr style={hrStyles}/>
                   <p style={postBodyStyles}>{post.body}</p>
+                  <hr style={hrStyles} />
+                  <span style={postAuthorStyles}>{post.author.username}</span>
                   <div style={clearStyles}></div>
                 </li>
               </ul>
@@ -86,7 +89,7 @@ class PostsShow extends Component {
                   {post.comments.map((comment) => {
                     return(
                       <li key={`comment-${comment.id}`} style={commentLiStyles}>
-                        {comment.body}
+                        <p style={commentBodyStyles}>{comment.body}</p>
                         <hr style={hrStyles} />
                         <span style={commentAuthorStyles}>{comment.author.username}</span>
                         <div style={clearStyles}></div>

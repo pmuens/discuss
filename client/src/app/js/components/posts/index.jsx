@@ -15,8 +15,7 @@ const liStyles = {
 
 const titleStyles = {
   fontSize: '20px',
-  marginBottom: '0px',
-  float: 'left'
+  marginBottom: '0px'
 };
 
 const titleLinkStyles = {
@@ -62,10 +61,9 @@ class PostsIndex extends Component {
                 return (
                   <li key={`post-${post.id}`} style={liStyles}>
                     <h1 style={titleStyles}><Link to={`posts/${post.id}/show`} style={titleLinkStyles}>{post.title}</Link></h1>
-                    <span style={authorStyles}>{post.author.username}</span>
-                    <div style={clearStyles}></div>
                     <hr style={hrStyles}/>
                     <span style={commentsStyles}>{post.comments.length} Comment(s)</span>
+                    <span style={authorStyles}>{post.author.username}</span>
                     <div style={clearStyles}></div>
                   </li>
                 )}
