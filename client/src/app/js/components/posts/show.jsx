@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
 import { getPost } from '../../actions/posts';
+import { createComment } from '../../actions/comments';
 import { Link } from 'react-router';
 
 const postUlStyles = {
@@ -60,13 +62,39 @@ const noDataAvailableStyles = {
   textAlign: 'center'
 };
 
+const textareaStyles = {
+  height: '100px'
+};
+
 class PostsShow extends Component {
   componentWillMount() {
     this.props.getPost(this.props.params.id);
   }
 
+  handleCreateComment(event) {
+    event.preventDefault();
+
+    const body = this.refs.body.value;
+
+    if (body.length !== 0) {
+      const comment = {
+        body,
+        postId: this.props.params.id,
+        jwt: this.props.currentUser.jwt
+      };
+
+      this.props.createComment(comment);
+
+      ReactDOM.findDOMNode(this.refs.body).value = '';
+
+      this.props.getPost(this.props.params.id);
+    } else {
+      alert('Please fill out all fields');
+    }
+  }
+
   render() {
-    const { post } = this.props;
+    const { post, currentUser } = this.props;
 
     return (
       <div className="row">
@@ -84,6 +112,15 @@ class PostsShow extends Component {
                 </li>
               </ul>
               <hr />
+              {currentUser ? (
+                <div>
+                  <form onSubmit={this.handleCreateComment.bind(this)}>
+                    <textarea style={textareaStyles} placeholder="Body" className="u-full-width" ref="body"></textarea>
+                    <input type="submit" className="button button-primary" value="Submit comment" />
+                  </form>
+                  <hr />
+                </div>
+              ) : null }
               {post.comments.length ? (
                 <ul style={commentUlStyles}>
                   {post.comments.map((comment) => {
@@ -107,7 +144,10 @@ class PostsShow extends Component {
 }
 
 function mapStateToProps(state) {
-  return { post: state.posts.post };
+  return {
+    post: state.posts.post,
+    currentUser: state.users.currentUser
+  };
 }
 
-export default connect(mapStateToProps, { getPost })(PostsShow);
+export default connect(mapStateToProps, { getPost, createComment })(PostsShow);
