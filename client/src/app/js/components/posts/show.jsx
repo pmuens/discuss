@@ -134,7 +134,7 @@ class PostsShow extends Component {
                     )}
                   )}
                 </ul>
-              ) : <div style={noDataAvailableStyles}>There are now comments written yet</div> }
+              ) : <div style={noDataAvailableStyles}>There are no comments written yet</div> }
             </div>
           ) : <div style={noDataAvailableStyles}>Seems like this post is not available <br /><Link to="/">Go back</Link></div> }
         </div>
