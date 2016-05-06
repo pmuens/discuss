@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { getPost, deletePost } from '../../actions/posts';
 import { createComment, deleteComment } from '../../actions/comments';
 import { Link } from 'react-router';
+import _ from 'lodash';
 
 const postUlStyles = {
   marginBottom: '10px'
@@ -133,6 +134,8 @@ class PostsShow extends Component {
   render() {
     const { post, currentUser } = this.props;
 
+    const sortedComments = post && post.comments.length ? _.orderBy(post.comments, 'createdAt', ['desc']) : [];
+
     return (
       <div className="row">
         <div className="twelve columns">
@@ -163,9 +166,9 @@ class PostsShow extends Component {
                   <hr />
                 </div>
               ) : null }
-              {post.comments.length ? (
+              {sortedComments.length ? (
                 <ul style={commentUlStyles}>
-                  {post.comments.map((comment) => {
+                  {sortedComments.map((comment) => {
                     return(
                       <li key={`comment-${comment.id}`} style={commentLiStyles}>
                         <p style={commentBodyStyles}>{comment.body}</p>

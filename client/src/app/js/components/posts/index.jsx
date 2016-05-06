@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { getPosts } from '../../actions/posts';
 import { Link } from 'react-router';
+import _ from 'lodash';
 
 const ulStyles = {
   marginBottom: '10px'
@@ -52,12 +53,14 @@ class PostsIndex extends Component {
   render() {
     const { posts } = this.props;
 
+    const sortedPosts = posts.length ? _.orderBy(posts, 'createdAt', ['desc']) : [];
+    
     return (
       <div className="row">
         <div className="twelve columns">
-          {posts.length ? (
+          {sortedPosts.length ? (
             <ul style={ulStyles}>
-              {posts.map((post) => {
+              {sortedPosts.map((post) => {
                 return (
                   <li key={`post-${post.id}`} style={liStyles}>
                     <h1 style={titleStyles}><Link to={`posts/${post.id}/show`} style={titleLinkStyles}>{post.title}</Link></h1>
