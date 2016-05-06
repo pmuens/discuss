@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { getPosts } from '../../actions/posts';
 import { Link } from 'react-router';
 import _ from 'lodash';
+import TimeAgo from 'react-timeago';
 
 const ulStyles = {
   marginBottom: '10px'
@@ -36,6 +37,14 @@ const commentsStyles = {
   float: 'left'
 };
 
+const timeSeparatorStyles = {
+  margin: '0px 5px'
+};
+
+const timeAgoStyles = {
+  fontStyle: 'italic'
+};
+
 const clearStyles = {
   clear: 'both'
 };
@@ -66,6 +75,9 @@ class PostsIndex extends Component {
                     <h1 style={titleStyles}><Link to={`posts/${post.id}/show`} style={titleLinkStyles}>{post.title}</Link></h1>
                     <hr style={hrStyles}/>
                     <span style={commentsStyles}>{post.comments.length} Comment(s)</span>
+                    <span style={timeSeparatorStyles}>
+                      - <TimeAgo date={+post.createdAt} style={timeAgoStyles} />
+                    </span>
                     <span style={authorStyles}>{post.author.username}</span>
                     <div style={clearStyles}></div>
                   </li>

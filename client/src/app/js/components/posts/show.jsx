@@ -5,6 +5,7 @@ import { getPost, deletePost } from '../../actions/posts';
 import { createComment, deleteComment } from '../../actions/comments';
 import { Link } from 'react-router';
 import _ from 'lodash';
+import TimeAgo from 'react-timeago';
 
 const postUlStyles = {
   marginBottom: '10px'
@@ -77,6 +78,10 @@ const textareaStyles = {
   height: '100px'
 };
 
+const timeAgoStyles = {
+  fontStyle: 'italic'
+};
+
 class PostsShow extends Component {
   componentWillMount() {
     this.props.getPost(this.props.params.id);
@@ -147,6 +152,7 @@ class PostsShow extends Component {
                   <hr style={hrStyles}/>
                   <p style={postBodyStyles}>{post.body}</p>
                   <hr style={hrStyles} />
+                  <TimeAgo date={+post.createdAt} style={timeAgoStyles} />
                   {currentUser && post.author.id === currentUser.id ? (
                     <a href="#" style={deletePostStyles} data-post-id={post.id} onClick={this.handleDeletePost.bind(this)}>
                       <i className="fa fa-trash"></i>
@@ -173,6 +179,7 @@ class PostsShow extends Component {
                       <li key={`comment-${comment.id}`} style={commentLiStyles}>
                         <p style={commentBodyStyles}>{comment.body}</p>
                         <hr style={hrStyles} />
+                        <TimeAgo date={+comment.createdAt} style={timeAgoStyles} />
                         {currentUser && comment.author.id === currentUser.id ? (
                           <a href="#" style={deleteCommentStyles} data-comment-id={comment.id} onClick={this.handleDeleteComment.bind(this)}>
                             <i className="fa fa-trash"></i>
