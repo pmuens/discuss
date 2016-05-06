@@ -17,8 +17,8 @@ module.exports = {
 
     user.password = bcryptjs.hashSync(user.password, 10);
 
-    user.createdAt = String(new Date().getTime());
-    user.updatedAt = String(new Date().getTime());
+    user.createdAt = String(Date.now());
+    user.updatedAt = String(Date.now());
 
     let putItem = db('put', {
       TableName: usersTable,
@@ -86,7 +86,7 @@ module.exports = {
         ':email': user.email,
         ':username': user.username,
         ':password': bcryptjs.hashSync(user.password, 10),
-        ':updatedAt': String(new Date().getTime())
+        ':updatedAt': String(Date.now())
       },
       ReturnValues: 'ALL_NEW'
     }).then(result => {

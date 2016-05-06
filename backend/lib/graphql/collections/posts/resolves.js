@@ -16,8 +16,8 @@ module.exports = {
 
     delete post.jwt;
     
-    post.createdAt = String(new Date().getTime());
-    post.updatedAt = String(new Date().getTime());
+    post.createdAt = String(Date.now());
+    post.updatedAt = String(Date.now());
 
     let putItem = db('put', {
       TableName: postsTable,
@@ -58,7 +58,7 @@ module.exports = {
       ExpressionAttributeValues: {
         ':title': post.title,
         ':body': post.body,
-        ':updatedAt': String(new Date().getTime()),
+        ':updatedAt': String(Date.now()),
         ':userId': userId
       },
       ReturnValues: 'ALL_NEW'

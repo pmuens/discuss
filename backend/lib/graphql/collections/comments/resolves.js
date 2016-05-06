@@ -16,8 +16,8 @@ module.exports = {
 
     delete comment.jwt;
 
-    comment.createdAt = String(new Date().getTime());
-    comment.updatedAt = String(new Date().getTime());
+    comment.createdAt = String(Date.now());
+    comment.updatedAt = String(Date.now());
 
     let putItem = db('put', {
       TableName: commentsTable,
@@ -71,7 +71,7 @@ module.exports = {
       ConditionExpression: 'userId = :userId',
       ExpressionAttributeValues: {
         ':body': comment.body,
-        ':updatedAt': String(new Date().getTime()),
+        ':updatedAt': String(Date.now()),
         ':userId': userId
       },
       ReturnValues: 'ALL_NEW'
