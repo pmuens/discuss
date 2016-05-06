@@ -7,7 +7,8 @@ import {
   ERROR,
   CREATE_POST,
   GET_POSTS,
-  GET_POST
+  GET_POST,
+  DELETE_POST
 } from './constants';
 
 export function createPost(post) {
@@ -115,6 +116,35 @@ export function getPost(id) {
     type: GET_POST,
     payload: json
   }))
+  .catch(exception => dispatch({
+    type: ERROR,
+    payload: exception.message
+  }));
+}
+
+export function deletePost(post) {
+  const query = { "query":
+    `mutation deletePost {
+      post: deletePost (
+        id: "${post.id}"
+        jwt: "${post.jwt}"
+      )
+      {
+        id
+      }
+    }`
+  };
+
+  return (dispatch) => fetch(`${API_URL}/graphql/`, {
+    method: 'POST',
+    body: JSON.stringify(query)
+  })
+  .then(response => response.json())
+  .then(json => dispatch({
+    type: DELETE_POST,
+    payload: json
+  }))
+  .then(() => dispatch(push('/')))
   .catch(exception => dispatch({
     type: ERROR,
     payload: exception.message

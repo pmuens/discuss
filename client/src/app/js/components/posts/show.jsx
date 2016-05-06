@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
-import { getPost } from '../../actions/posts';
+import { getPost, deletePost } from '../../actions/posts';
 import { createComment, deleteComment } from '../../actions/comments';
 import { Link } from 'react-router';
 
@@ -18,6 +18,11 @@ const postLiStyles = {
 const postTitleStyles = {
   fontSize: '20px',
   marginBottom: '0px'
+};
+
+const deletePostStyles = {
+  marginLeft: '10px',
+  float: 'right'
 };
 
 const postAuthorStyles = {
@@ -98,6 +103,19 @@ class PostsShow extends Component {
     }
   }
 
+  handleDeletePost(event, post) {
+    event.preventDefault();
+
+    if (confirm('Do you really want to delete this post?')) {
+      const post = {
+        id: event.currentTarget.getAttribute('data-post-id'),
+        jwt: this.props.currentUser.jwt
+      };
+
+      this.props.deletePost(post);
+    }
+  }
+
   handleDeleteComment(event, comment) {
     event.preventDefault();
 
@@ -126,6 +144,11 @@ class PostsShow extends Component {
                   <hr style={hrStyles}/>
                   <p style={postBodyStyles}>{post.body}</p>
                   <hr style={hrStyles} />
+                  {currentUser && post.author.id === currentUser.id ? (
+                    <a href="#" style={deletePostStyles} data-post-id={post.id} onClick={this.handleDeletePost.bind(this)}>
+                      <i className="fa fa-trash"></i>
+                    </a>
+                  ) : null}
                   <span style={postAuthorStyles}>{post.author.username}</span>
                   <div style={clearStyles}></div>
                 </li>
@@ -174,4 +197,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, { getPost, createComment, deleteComment })(PostsShow);
+export default connect(mapStateToProps, { getPost, deletePost, createComment, deleteComment })(PostsShow);
