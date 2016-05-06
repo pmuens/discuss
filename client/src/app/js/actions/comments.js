@@ -3,6 +3,7 @@ import { API_URL } from './index';
 import {
   ERROR,
   CREATE_COMMENT,
+  DELETE_COMMENT
 } from './constants';
 
 export function createComment(comment) {
@@ -27,6 +28,34 @@ export function createComment(comment) {
   .then(response => response.json())
   .then(json => dispatch({
     type: CREATE_COMMENT,
+    payload: json
+  }))
+  .catch(exception => dispatch({
+    type: ERROR,
+    payload: exception.message
+  }));
+}
+
+export function deleteComment(comment) {
+  const query = { "query":
+    `mutation deleteComment {
+      comment: deleteComment (
+        id: "${comment.id}"
+        jwt: "${comment.jwt}"
+      )
+      {
+        id
+      }
+    }`
+  };
+
+  return (dispatch) => fetch(`${API_URL}/graphql/`, {
+    method: 'POST',
+    body: JSON.stringify(query)
+  })
+  .then(response => response.json())
+  .then(json => dispatch({
+    type: DELETE_COMMENT,
     payload: json
   }))
   .catch(exception => dispatch({

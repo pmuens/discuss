@@ -14,3 +14,4 @@ export const GET_POST = 'GET_POST';
 
 // comments
 export const CREATE_COMMENT = 'CREATE_COMMENT';
+export const DELETE_COMMENT = 'DELETE_COMMENT';

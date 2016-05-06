@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
 import { getPost } from '../../actions/posts';
-import { createComment } from '../../actions/comments';
+import { createComment, deleteComment } from '../../actions/comments';
 import { Link } from 'react-router';
 
 const postUlStyles = {
@@ -46,6 +46,11 @@ const commentBodyStyles = {
 
 const commentAuthorStyles = {
   fontStyle: 'italic',
+  float: 'right'
+};
+
+const deleteCommentStyles = {
+  marginLeft: '10px',
   float: 'right'
 };
 
@@ -93,6 +98,20 @@ class PostsShow extends Component {
     }
   }
 
+  handleDeleteComment(event, comment) {
+    event.preventDefault();
+
+    if (confirm('Do you really want to delete this comment?')) {
+      const comment = {
+        id: event.currentTarget.getAttribute('data-comment-id'),
+        jwt: this.props.currentUser.jwt
+      };
+
+      this.props.deleteComment(comment);
+      this.props.getPost(this.props.params.id);
+    }
+  }
+
   render() {
     const { post, currentUser } = this.props;
 
@@ -128,6 +147,11 @@ class PostsShow extends Component {
                       <li key={`comment-${comment.id}`} style={commentLiStyles}>
                         <p style={commentBodyStyles}>{comment.body}</p>
                         <hr style={hrStyles} />
+                        {currentUser && comment.author.id === currentUser.id ? (
+                          <a href="#" style={deleteCommentStyles} data-comment-id={comment.id} onClick={this.handleDeleteComment.bind(this)}>
+                            <i className="fa fa-trash"></i>
+                          </a>
+                        ) : null}
                         <span style={commentAuthorStyles}>{comment.author.username}</span>
                         <div style={clearStyles}></div>
                       </li>
@@ -150,4 +174,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, { getPost, createComment })(PostsShow);
+export default connect(mapStateToProps, { getPost, createComment, deleteComment })(PostsShow);
