@@ -26,7 +26,8 @@ const titleLinkStyles = {
 
 const authorStyles = {
   fontStyle: 'italic',
-  float: 'right'
+  float: 'right',
+  color: '#B1B1B1'
 };
 
 const hrStyles = {
@@ -42,7 +43,8 @@ const timeSeparatorStyles = {
 };
 
 const timeAgoStyles = {
-  fontStyle: 'italic'
+  fontStyle: 'italic',
+  color: '#B1B1B1'
 };
 
 const clearStyles = {

@@ -29,7 +29,8 @@ const deletePostStyles = {
 
 const postAuthorStyles = {
   fontStyle: 'italic',
-  float: 'right'
+  float: 'right',
+  color: '#B1B1B1'
 };
 
 const postBodyStyles = {
@@ -53,7 +54,8 @@ const commentBodyStyles = {
 
 const commentAuthorStyles = {
   fontStyle: 'italic',
-  float: 'right'
+  float: 'right',
+  color: '#B1B1B1'
 };
 
 const deleteCommentStyles = {
@@ -79,7 +81,8 @@ const textareaStyles = {
 };
 
 const timeAgoStyles = {
-  fontStyle: 'italic'
+  fontStyle: 'italic',
+  color: '#B1B1B1'
 };
 
 class PostsShow extends Component {
