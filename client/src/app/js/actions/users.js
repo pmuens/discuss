@@ -71,7 +71,7 @@ export function signIn(user) {
     .then(json => _.isEmpty(json.errors) ? json : Promise.reject(json.errors[0]))
     .then(payload => {
       dispatch({ payload, type: SIGN_IN });
-      dispatch(push('/'));
+      dispatch(push(window.previousLocation ? window.previousLocation : '/'));
     })
     .catch(exception => dispatch({
       type: ERROR,

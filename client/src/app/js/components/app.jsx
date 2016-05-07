@@ -6,6 +6,10 @@ import Error from './shared/error';
 import Footer from './shared/footer';
 
 export default class App extends Component {
+  componentWillReceiveProps() {
+    window.previousLocation = this.props.location;
+  }
+
   render() {
     return (
       <div>
