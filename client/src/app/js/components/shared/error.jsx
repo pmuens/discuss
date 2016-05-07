@@ -5,11 +5,16 @@ import { resetError } from '../../actions/error';
 const styles = {
   backgroundColor: '#FC9D9A',
   padding: '1em',
-  borderRadius: '4px',
   marginBottom: '1em'
 };
 
 class Error extends Component {
+  componentDidMount() {
+    setTimeout(() => {
+      this.props.resetError();
+    }, 5000);
+  }
+
   handleDismissClick(event) {
     event.preventDefault();
     this.props.resetError();
