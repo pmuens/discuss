@@ -3,6 +3,7 @@ import { Component } from 'react';
 
 import Header from './shared/header';
 import Error from './shared/error';
+import Footer from './shared/footer';
 
 export default class App extends Component {
   render() {
@@ -13,6 +14,7 @@ export default class App extends Component {
           <Error />
           {this.props.children}
         </div>
+        <Footer />
       </div>
     );
   }
