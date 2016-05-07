@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
 import { getPost, deletePost } from '../../actions/posts';
-import { createComment, deleteComment } from '../../actions/comments';
+import { createComment, updateComment, deleteComment } from '../../actions/comments';
 import { Link } from 'react-router';
 import _ from 'lodash';
 import TimeAgo from 'react-timeago';
@@ -139,6 +139,28 @@ class PostsShow extends Component {
     }
   }
 
+  handleUpdateComment(event) {
+    const body = event.target.textContent;
+
+    if (body.length !== 0) {
+      const comment = {
+        id: event.currentTarget.getAttribute('data-comment-id'),
+        body,
+        jwt: this.props.currentUser.jwt
+      };
+
+      this.props.updateComment(comment);
+    } else {
+      alert('You can not submit an empty comment');
+      event.currentTarget.innerHTML = event.currentTarget.getAttribute('data-comment-body');
+    }
+  }
+
+  isCurrentUserCommentAuthor(comment) {
+    const { currentUser } = this.props;
+    return currentUser && comment.author.id === currentUser.id;
+  }
+
   render() {
     const { post, currentUser } = this.props;
 
@@ -180,10 +202,12 @@ class PostsShow extends Component {
                   {sortedComments.map((comment) => {
                     return(
                       <li key={`comment-${comment.id}`} style={commentLiStyles}>
-                        <p style={commentBodyStyles}>{comment.body}</p>
+                        {this.isCurrentUserCommentAuthor(comment) ? (
+                          <p style={commentBodyStyles} data-comment-id={comment.id} data-comment-body={comment.body} contentEditable="true" onBlur={this.handleUpdateComment.bind(this)}>{comment.body}</p>
+                        ) : <p style={commentBodyStyles}>{comment.body}</p>}
                         <hr style={hrStyles} />
                         <TimeAgo date={+comment.createdAt} style={timeAgoStyles} />
-                        {currentUser && comment.author.id === currentUser.id ? (
+                        {this.isCurrentUserCommentAuthor(comment) ? (
                           <a href="#" style={deleteCommentStyles} data-comment-id={comment.id} onClick={this.handleDeleteComment.bind(this)}>
                             <i className="fa fa-trash"></i>
                           </a>
@@ -210,4 +234,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, { getPost, deletePost, createComment, deleteComment })(PostsShow);
+export default connect(mapStateToProps, { getPost, deletePost, createComment, updateComment, deleteComment })(PostsShow);
