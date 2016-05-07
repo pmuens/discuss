@@ -1,10 +1,14 @@
 # Discuss
+[![serverless](http://public.serverless.com/badges/v3.svg)](http://www.serverless.com)
+
 > [Serverless](http://serverless.com) forum software
 
 ---
 
 Table of contents
 - [Setup](#setup)
+  - [backend](#backend)
+  - [client](#client)
 - [GraphQL queries](#graphql-queries)
   - [users](#users)
   - [posts](#posts)
@@ -13,6 +17,7 @@ Table of contents
 ---
 
 ## Setup
+### Backend
 1. Run `serverless project init` to initialize the Serverless project.
 
 2. Add the following environment variables to the JSON array of the corresponding file in `_meta/variables`.
@@ -28,6 +33,19 @@ Table of contents
 3. `cd` into the root of the project. Run `npm install` to install all necessary NPM dependencies for the Serverless project.
 
 4. Run `cd backend/lib && npm install && cd ../../` to install the NPM dependencies for the GraphQL backend.
+
+5. Run `serverless endpoint deploy --all` to deploy the CORS enabled endpoints
+
+### Client
+1. Run `cd client/src && npm install && cd ../../` tin install the NPM dependencies for the client.
+
+2. Replace the `API_URL` in `client/src/app/js/actions/index.js` with your deployed endpoint (the root of the endpoint)
+
+3. Run `npm start` to run the client locally
+
+4. Run `npm run build` to build the client
+
+5. Run `serverless client deploy` to host the frontend with the help of an S3 bucket
 
 ---
 
