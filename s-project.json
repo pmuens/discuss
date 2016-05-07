@@ -1,12 +1,16 @@
 {
   "name": "discuss",
   "custom": {
+    "client": {
+      "bucketName": "discuss.${stage}.${region}"
+    },
     "cors": {
       "allowOrigin": "*",
       "allowHeaders": ["Content-Type", "X-Amz-Date", "Authorization", "X-Api-Key"]
     }
   },
   "plugins": [
-    "serverless-cors-plugin"
+    "serverless-cors-plugin",
+    "serverless-client-s3"
   ]
 }
