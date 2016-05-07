@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
-import { getPost, deletePost } from '../../actions/posts';
+import { getPost, updatePost, deletePost } from '../../actions/posts';
 import { createComment, updateComment, deleteComment } from '../../actions/comments';
 import { Link } from 'react-router';
 import _ from 'lodash';
@@ -125,6 +125,42 @@ class PostsShow extends Component {
     }
   }
 
+  handleUpdatePostTitle(event) {
+    const title = event.target.textContent;
+
+    if (title.length !== 0) {
+      const post = {
+        id: event.currentTarget.getAttribute('data-post-id'),
+        title,
+        body: event.currentTarget.getAttribute('data-post-body'),
+        jwt: this.props.currentUser.jwt
+      };
+
+      this.props.updatePost(post);
+    } else {
+      alert('You can not submit an empty post title');
+      event.currentTarget.innerHTML = event.currentTarget.getAttribute('data-post-title');
+    }
+  }
+
+  handleUpdatePostBody(event) {
+    const body = event.target.textContent;
+
+    if (body.length !== 0) {
+      const post = {
+        id: event.currentTarget.getAttribute('data-post-id'),
+        title: event.currentTarget.getAttribute('data-post-title'),
+        body,
+        jwt: this.props.currentUser.jwt
+      };
+
+      this.props.updatePost(post);
+    } else {
+      alert('You can not submit an empty post body');
+      event.currentTarget.innerHTML = event.currentTarget.getAttribute('data-post-body');
+    }
+  }
+
   handleDeleteComment(event, comment) {
     event.preventDefault();
 
@@ -156,6 +192,11 @@ class PostsShow extends Component {
     }
   }
 
+  isCurrentUserPostAuthor(post) {
+    const { currentUser } = this.props;
+    return currentUser && post.author.id === currentUser.id;
+  }
+
   isCurrentUserCommentAuthor(comment) {
     const { currentUser } = this.props;
     return currentUser && comment.author.id === currentUser.id;
@@ -173,12 +214,16 @@ class PostsShow extends Component {
             <div>
               <ul style={postUlStyles}>
                 <li key={`post-${post.id}`} style={postLiStyles}>
-                  <h1 style={postTitleStyles}>{post.title}</h1>
+                  {this.isCurrentUserPostAuthor(post) ? (
+                    <h1 style={postTitleStyles} data-post-id={post.id} data-post-title={post.title} data-post-body={post.body} contentEditable="true" onBlur={this.handleUpdatePostTitle.bind(this)}>{post.title}</h1>
+                  ) : <h1 style={postTitleStyles}>{post.title}</h1> }
                   <hr style={hrStyles}/>
-                  <p style={postBodyStyles}>{post.body}</p>
+                  {this.isCurrentUserPostAuthor(post) ? (
+                    <p style={postBodyStyles} data-post-id={post.id} data-post-title={post.title} data-post-body={post.body} contentEditable="true" onBlur={this.handleUpdatePostBody.bind(this)}>{post.body}</p>
+                  ) : <p style={postBodyStyles}>{post.body}</p> }
                   <hr style={hrStyles} />
                   <TimeAgo date={+post.createdAt} style={timeAgoStyles} />
-                  {currentUser && post.author.id === currentUser.id ? (
+                  {this.isCurrentUserPostAuthor(post) ? (
                     <a href="#" style={deletePostStyles} data-post-id={post.id} onClick={this.handleDeletePost.bind(this)}>
                       <i className="fa fa-trash"></i>
                     </a>
@@ -234,4 +279,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, { getPost, deletePost, createComment, updateComment, deleteComment })(PostsShow);
+export default connect(mapStateToProps, { getPost, updatePost, deletePost, createComment, updateComment, deleteComment })(PostsShow);

@@ -8,6 +8,7 @@ import {
   CREATE_POST,
   GET_POSTS,
   GET_POST,
+  UPDATE_POST,
   DELETE_POST
 } from './constants';
 
@@ -114,6 +115,36 @@ export function getPost(id) {
   .then(response => response.json())
   .then(json => dispatch({
     type: GET_POST,
+    payload: json
+  }))
+  .catch(exception => dispatch({
+    type: ERROR,
+    payload: exception.message
+  }));
+}
+
+export function updatePost(post) {
+  const query = { "query":
+    `mutation updatePost {
+      post: updatePost (
+        id: "${post.id}"
+        title: "${post.title}"
+        body: "${post.body}"
+        jwt: "${post.jwt}"
+      )
+      {
+        id
+      }
+    }`
+  };
+
+  return (dispatch) => fetch(`${API_URL}/graphql/`, {
+    method: 'POST',
+    body: JSON.stringify(query)
+  })
+  .then(response => response.json())
+  .then(json => dispatch({
+    type: UPDATE_POST,
     payload: json
   }))
   .catch(exception => dispatch({
