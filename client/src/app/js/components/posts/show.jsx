@@ -112,7 +112,7 @@ class PostsShow extends Component {
     }
   }
 
-  handleDeletePost(event, post) {
+  handleDeletePost(event) {
     event.preventDefault();
 
     if (confirm('Do you really want to delete this post?')) {
@@ -161,7 +161,7 @@ class PostsShow extends Component {
     }
   }
 
-  handleDeleteComment(event, comment) {
+  handleDeleteComment(event) {
     event.preventDefault();
 
     if (confirm('Do you really want to delete this comment?')) {
