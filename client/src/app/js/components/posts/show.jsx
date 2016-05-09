@@ -105,8 +105,6 @@ class PostsShow extends Component {
       this.props.createComment(comment);
 
       ReactDOM.findDOMNode(this.refs.body).value = '';
-
-      this.props.getPost(this.props.params.id);
     } else {
       alert('Please fill out all fields');
     }
@@ -171,7 +169,6 @@ class PostsShow extends Component {
       };
 
       this.props.deleteComment(comment);
-      this.props.getPost(this.props.params.id);
     }
   }
 
@@ -203,9 +200,8 @@ class PostsShow extends Component {
   }
 
   render() {
-    const { post, currentUser } = this.props;
-
-    const sortedComments = post && post.comments.length ? _.orderBy(post.comments, 'createdAt', ['desc']) : [];
+    const { post, comments, currentUser } = this.props;
+    const sortedComments = post && comments.length ? _.orderBy(comments, 'createdAt', ['desc']) : [];
 
     return (
       <div className="row">
@@ -275,6 +271,7 @@ class PostsShow extends Component {
 function mapStateToProps(state) {
   return {
     post: state.posts.post,
+    comments: state.comments.comments,
     currentUser: state.users.currentUser
   };
 }

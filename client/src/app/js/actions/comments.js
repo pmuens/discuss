@@ -18,6 +18,12 @@ export function createComment(comment) {
       {
         id
         body
+        createdAt
+        updatedAt
+        author {
+          id
+          username
+        }
       }
     }`
   };
