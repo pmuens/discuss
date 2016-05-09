@@ -6,6 +6,7 @@
 ---
 
 Table of contents
+- [Video demo](#video-demo)
 - [Setup](#setup)
   - [backend](#backend)
   - [client](#client)
@@ -15,6 +16,9 @@ Table of contents
   - [comments](#comments)
 
 ---
+
+## Video demo
+[![Discuss YouTube video](https://img.youtube.com/vi/ygOKXkhj6wo/0.jpg)](https://www.youtube.com/watch?v=ygOKXkhj6wo)
 
 ## Setup
 ### Backend
