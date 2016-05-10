@@ -22,9 +22,15 @@ Table of contents
 
 ## Setup
 ### Backend
-1. Run `serverless project init` to initialize the Serverless project.
+1. Clone `git clone git@github.com:JustServerless/discuss.git` to your local machine.
 
-2. Add the following environment variables to the JSON array of the corresponding file in `_meta/variables`.
+2. Run `cd discuss` to change directory.
+
+3. Run `npm install` to install all necessary NPM dependencies for the Serverless project.
+
+4. Run `serverless project init` to initialize the Serverless project.
+
+5. Add the following environment variables to the JSON array of the corresponding file in `_meta/variables`. (e.g. in `_meta/variables/s-variables-common.json`)
 
 ```
 {
@@ -34,18 +40,16 @@ Table of contents
 }
 ```
 
-3. `cd` into the root of the project. Run `npm install` to install all necessary NPM dependencies for the Serverless project.
+6. Run `cd backend/lib && npm install && cd ../../` to install the NPM dependencies for the GraphQL backend.
 
-4. Run `cd backend/lib && npm install && cd ../../` to install the NPM dependencies for the GraphQL backend.
-
-5. Run `serverless endpoint deploy --all` to deploy the CORS enabled endpoints
+7. Run `serverless dash deploy` and select endpoint and function to deploy the CORS enabled endpoint and function.
 
 ### Client
-1. Run `cd client/src && npm install && cd ../../` tin install the NPM dependencies for the client.
+1. Run `cd client/src && npm install` tin install the NPM dependencies for the client.
 
-2. Replace the `API_URL` in `client/src/app/js/actions/index.js` with your deployed endpoint (the root of the endpoint)
+2. Replace the `API_URL` in `client/src/app/js/actions/index.js` with your deployed endpoint (the root of the endpoint) without the `graphql` string at the end.
 
-3. Run `npm start` to run the client locally
+3. Run `npm start` (in the client/src folder) to run the client locally. The client is available in your browser at `http://localhost:8080/`
 
 4. Run `npm run build` to build the client
 
