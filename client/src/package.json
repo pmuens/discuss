@@ -32,6 +32,7 @@
   "dependencies": {
     "babel-plugin-transform-class-properties": "^6.6.0",
     "babel-plugin-transform-object-rest-spread": "^6.6.5",
+    "lodash": "^4.12.0",
     "react": "^15.0.2",
     "react-dom": "^15.0.2",
     "react-mixin": "^3.0.5",
