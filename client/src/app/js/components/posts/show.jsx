@@ -27,6 +27,11 @@ const deletePostStyles = {
   float: 'right'
 };
 
+const editPostStyles = {
+  marginLeft: '10px',
+  float: 'right'
+};
+
 const postAuthorStyles = {
   fontStyle: 'italic',
   float: 'right',
@@ -82,10 +87,16 @@ const textareaStyles = {
 
 const timeAgoStyles = {
   fontStyle: 'italic',
-  color: '#B1B1B1'
+  color: '#B1B1B1',
+  float: 'left'
 };
 
 class PostsShow extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {editing: false};
+  }
+
   componentWillMount() {
     this.props.getPost(this.props.params.id);
   }
@@ -110,6 +121,45 @@ class PostsShow extends Component {
     }
   }
 
+  handleEditPost(event) {
+    event.preventDefault();
+
+    this.setState({editing: true});
+  }
+
+  handleCancelEditPost(event) {
+    event.preventDefault();
+
+    this.setState({editing: false});
+  }
+
+  handleUpdatePost(event) {
+    event.preventDefault();
+
+    const id = event.currentTarget.getAttribute('data-post-id');
+    const title = this.refs.title.value;
+    const body = this.refs.body.value;
+
+    if (title.length !== 0 && body.length !== 0) {
+      const post = {
+        id: id,
+        title: title,
+        body: body,
+        jwt: this.props.currentUser.jwt
+      };
+
+      this.props.updatePost(post);
+
+      this.setState({editing: false});
+
+      this.props.post.title = title;
+      this.props.post.body = body;
+
+    } else {
+      alert('You can not submit an empty title or empty body');
+    }
+  }
+
   handleDeletePost(event) {
     event.preventDefault();
 
@@ -120,42 +170,6 @@ class PostsShow extends Component {
       };
 
       this.props.deletePost(post);
-    }
-  }
-
-  handleUpdatePostTitle(event) {
-    const title = event.target.textContent;
-
-    if (title.length !== 0) {
-      const post = {
-        id: event.currentTarget.getAttribute('data-post-id'),
-        title,
-        body: event.currentTarget.getAttribute('data-post-body'),
-        jwt: this.props.currentUser.jwt
-      };
-
-      this.props.updatePost(post);
-    } else {
-      alert('You can not submit an empty post title');
-      event.currentTarget.innerHTML = event.currentTarget.getAttribute('data-post-title');
-    }
-  }
-
-  handleUpdatePostBody(event) {
-    const body = event.target.textContent;
-
-    if (body.length !== 0) {
-      const post = {
-        id: event.currentTarget.getAttribute('data-post-id'),
-        title: event.currentTarget.getAttribute('data-post-title'),
-        body,
-        jwt: this.props.currentUser.jwt
-      };
-
-      this.props.updatePost(post);
-    } else {
-      alert('You can not submit an empty post body');
-      event.currentTarget.innerHTML = event.currentTarget.getAttribute('data-post-body');
     }
   }
 
@@ -201,6 +215,7 @@ class PostsShow extends Component {
 
   render() {
     const { post, comments, currentUser } = this.props;
+    const { editing } = this.state;
     const sortedComments = post && comments.length ? _.orderBy(comments, 'createdAt', ['desc']) : [];
 
     return (
@@ -211,29 +226,53 @@ class PostsShow extends Component {
               <ul style={postUlStyles}>
                 <li key={`post-${post.id}`} style={postLiStyles}>
                   {this.isCurrentUserPostAuthor(post) ? (
-                    <h1 style={postTitleStyles} data-post-id={post.id} data-post-title={post.title} data-post-body={post.body} contentEditable="true" onBlur={this.handleUpdatePostTitle.bind(this)}>{post.title}</h1>
+                    <h1 style={postTitleStyles} data-post-id={post.id}>
+                      {editing ? (
+                        <input className="u-full-width" ref="title" defaultValue={post.title}/>
+                      ) : post.title}
+                    </h1>
                   ) : <h1 style={postTitleStyles}>{post.title}</h1> }
                   <hr style={hrStyles}/>
                   {this.isCurrentUserPostAuthor(post) ? (
-                    <p style={postBodyStyles} data-post-id={post.id} data-post-title={post.title} data-post-body={post.body} contentEditable="true" onBlur={this.handleUpdatePostBody.bind(this)}>{post.body}</p>
+                    <p style={postBodyStyles} data-post-id={post.id}>
+                      {editing ? (
+                        <textarea className="u-full-width" ref="body" defaultValue={post.body}/>
+                      ) : post.body}
+                    </p>
                   ) : <p style={postBodyStyles}>{post.body}</p> }
-                  <hr style={hrStyles} />
-                  <TimeAgo date={+post.createdAt} style={timeAgoStyles} />
+                  <hr style={hrStyles}/>
+                  <TimeAgo date={+post.createdAt} style={timeAgoStyles}/>
                   {this.isCurrentUserPostAuthor(post) ? (
-                    <a href="#" style={deletePostStyles} data-post-id={post.id} onClick={this.handleDeletePost.bind(this)}>
-                      <i className="fa fa-trash"></i>
-                    </a>
+                    !editing ? (
+                      <div>
+                        <a href="#" style={deletePostStyles} data-post-id={post.id}
+                           onClick={this.handleDeletePost.bind(this)}>
+                          <i className="fa fa-trash"></i>
+                        </a>
+                        <a href="#" style={editPostStyles} data-post-id={post.id}
+                           onClick={this.handleEditPost.bind(this)}>
+                          <i className="fa fa-pencil-square-o"></i>
+                        </a>
+                      </div>
+                    ) : (
+                      <div>
+                        <a className="button" href="#" style={deletePostStyles} data-post-id={post.id}
+                           onClick={this.handleCancelEditPost.bind(this)}>Cancel</a>
+                        <a className="button button-primary" href="#" style={editPostStyles} data-post-id={post.id}
+                           onClick={this.handleUpdatePost.bind(this)}>Save</a>
+                      </div>
+                    )
                   ) : null}
                   <span style={postAuthorStyles}>{post.author.username}</span>
                   <div style={clearStyles}></div>
                 </li>
               </ul>
               <hr />
-              {currentUser ? (
+              {currentUser && !editing ? (
                 <div>
                   <form onSubmit={this.handleCreateComment.bind(this)}>
                     <textarea style={textareaStyles} placeholder="Body" className="u-full-width" ref="body"></textarea>
-                    <input type="submit" className="button button-primary" value="Submit comment" />
+                    <input type="submit" className="button button-primary" value="Submit comment"/>
                   </form>
                   <hr />
                 </div>
@@ -241,27 +280,31 @@ class PostsShow extends Component {
               {sortedComments.length ? (
                 <ul style={commentUlStyles}>
                   {sortedComments.map((comment) => {
-                    return(
-                      <li key={`comment-${comment.id}`} style={commentLiStyles}>
-                        {this.isCurrentUserCommentAuthor(comment) ? (
-                          <p style={commentBodyStyles} data-comment-id={comment.id} data-comment-body={comment.body} contentEditable="true" onBlur={this.handleUpdateComment.bind(this)}>{comment.body}</p>
-                        ) : <p style={commentBodyStyles}>{comment.body}</p>}
-                        <hr style={hrStyles} />
-                        <TimeAgo date={+comment.createdAt} style={timeAgoStyles} />
-                        {this.isCurrentUserCommentAuthor(comment) ? (
-                          <a href="#" style={deleteCommentStyles} data-comment-id={comment.id} onClick={this.handleDeleteComment.bind(this)}>
-                            <i className="fa fa-trash"></i>
-                          </a>
-                        ) : null}
-                        <span style={commentAuthorStyles}>{comment.author.username}</span>
-                        <div style={clearStyles}></div>
-                      </li>
-                    )}
+                      return (
+                        <li key={`comment-${comment.id}`} style={commentLiStyles}>
+                          {this.isCurrentUserCommentAuthor(comment) ? (
+                            <p style={commentBodyStyles} data-comment-id={comment.id} data-comment-body={comment.body}
+                               contentEditable="true" onBlur={this.handleUpdateComment.bind(this)}>{comment.body}</p>
+                          ) : <p style={commentBodyStyles}>{comment.body}</p>}
+                          <hr style={hrStyles}/>
+                          <TimeAgo date={+comment.createdAt} style={timeAgoStyles}/>
+                          {this.isCurrentUserCommentAuthor(comment) ? (
+                            <a href="#" style={deleteCommentStyles} data-comment-id={comment.id}
+                               onClick={this.handleDeleteComment.bind(this)}>
+                              <i className="fa fa-trash"></i>
+                            </a>
+                          ) : null}
+                          <span style={commentAuthorStyles}>{comment.author.username}</span>
+                          <div style={clearStyles}></div>
+                        </li>
+                      )
+                    }
                   )}
                 </ul>
               ) : <div style={noDataAvailableStyles}>There are no comments written yet</div> }
             </div>
-          ) : <div style={noDataAvailableStyles}>Seems like this post is not available <br /><Link to="/">Go back</Link></div> }
+          ) : <div style={noDataAvailableStyles}>Seems like this post is not available <br /><Link to="/">Go back</Link>
+          </div> }
         </div>
       </div>
     );
@@ -276,4 +319,11 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, { getPost, updatePost, deletePost, createComment, updateComment, deleteComment })(PostsShow);
+export default connect(mapStateToProps, {
+  getPost,
+  updatePost,
+  deletePost,
+  createComment,
+  updateComment,
+  deleteComment
+})(PostsShow);
