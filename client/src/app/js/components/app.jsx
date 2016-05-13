@@ -5,6 +5,10 @@ import Header from './shared/header';
 import Error from './shared/error';
 import Footer from './shared/footer';
 
+const containerStyles = {
+  marginBottom: '100px'
+};
+
 export default class App extends Component {
   componentWillReceiveProps() {
     window.previousLocation = this.props.location;
@@ -14,7 +18,7 @@ export default class App extends Component {
     return (
       <div>
         <Header />
-        <div className="container">
+        <div className="container" style={containerStyles}>
           <Error />
           {this.props.children}
         </div>
