@@ -23,6 +23,7 @@ export function createComment(comment) {
         author {
           id
           username
+          gravatar
         }
       }
     }`

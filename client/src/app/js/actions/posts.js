@@ -56,6 +56,7 @@ export function getPosts() {
         author {
           id
           username
+          gravatar
         }
         comments {
           id
@@ -94,6 +95,7 @@ export function getPost(id) {
         author {
           id
           username
+          gravatar
         }
         comments {
           id
@@ -103,6 +105,7 @@ export function getPost(id) {
           author {
             id
             username
+            gravatar
           }
         }
       }

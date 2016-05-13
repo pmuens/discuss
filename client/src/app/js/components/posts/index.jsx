@@ -56,6 +56,11 @@ const noDataAvailableStyles = {
   textAlign: 'center'
 };
 
+const gravatarStyles = {
+  'height': '30px',
+  'display': 'inline-block'
+};
+
 class PostsIndex extends Component {
   componentWillMount() {
     this.props.getPosts();
@@ -80,7 +85,7 @@ class PostsIndex extends Component {
                     <span style={timeSeparatorStyles}>
                       - <TimeAgo date={+post.createdAt} style={timeAgoStyles} />
                     </span>
-                    <span style={authorStyles}>{post.author.username}</span>
+                    <span style={authorStyles}><img style={gravatarStyles} src={post.author.gravatar} /> ● {post.author.username}</span>
                     <div style={clearStyles}></div>
                   </li>
                 )}

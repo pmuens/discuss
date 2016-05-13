@@ -6,6 +6,7 @@ const bcryptjs = require('bcryptjs');
 const db = require('../../../dynamodb');
 const authenticate = require('../../../auth').authenticate;
 const decode = require('../../../auth').decode;
+const gravatar = require('gravatar');
 
 const stage = process.env.SERVERLESS_STAGE;
 const projectName = process.env.SERVERLESS_PROJECT;
@@ -50,6 +51,7 @@ module.exports = {
       delete Item.password;
 
       Item.jwt = authenticate(Item);
+      Item.gravatar = gravatar.url(Item.email, {s: '100', r: 'x', d: 'retro'}, true);
 
       return Item;
     });
@@ -70,6 +72,8 @@ module.exports = {
     }).then(result => {
       const Item = result.Item;
       if (!Item) return Promise.reject('User not found');
+
+      Item.gravatar = gravatar.url(Item.email, {s: '100', r: 'x', d: 'retro'}, true);
 
       return Item;
     });

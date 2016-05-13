@@ -94,6 +94,11 @@ const timeAgoStyles = {
   float: 'left'
 };
 
+const gravatarStyles = {
+  'height': '30px',
+  'display': 'inline-block'
+};
+
 const md = new MarkdownIt({
   linkify: true,
   html: true,
@@ -286,7 +291,7 @@ class PostsShow extends Component {
                       </div>
                     )
                   ) : null}
-                  <span style={postAuthorStyles}>{post.author.username}</span>
+                  <span style={postAuthorStyles}><img style={gravatarStyles} src={post.author.gravatar} /> ● {post.author.username}</span>
                   <div style={clearStyles}></div>
                 </li>
               </ul>
@@ -317,7 +322,7 @@ class PostsShow extends Component {
                               <i className="fa fa-trash"></i>
                             </a>
                           ) : null}
-                          <span style={commentAuthorStyles}>{comment.author.username}</span>
+                          <span style={commentAuthorStyles}><img style={gravatarStyles} src={comment.author.gravatar} /> ● {comment.author.username}</span>
                           <div style={clearStyles}></div>
                         </li>
                       )

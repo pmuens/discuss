@@ -12,6 +12,7 @@ module.exports = new GraphQLObjectType({
     username: { type: GraphQLString },
     createdAt: { type: GraphQLString },
     updatedAt: { type: GraphQLString },
-    jwt: { type: GraphQLString }
+    jwt: { type: GraphQLString },
+    gravatar: { type: GraphQLString }
   })
 });
