@@ -16,7 +16,7 @@ class PostsNew extends Component {
     event.preventDefault();
 
     const title = this.refs.title.value;
-    const body = this.refs.body.value;
+    const body = this.refs.body.value.replace(/(?:\r\n|\r|\n)/g, '<br />');
 
     if (title.length !== 0 && body.length !== 0) {
       const post = {
