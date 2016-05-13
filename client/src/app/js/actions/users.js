@@ -56,6 +56,7 @@ export function signIn(user) {
         username
         email
         jwt
+        gravatar
       }
     }`
   };

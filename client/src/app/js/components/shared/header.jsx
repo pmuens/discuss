@@ -33,6 +33,11 @@ const liStyles = {
   marginLeft: '10px'
 };
 
+const gravatarStyles = {
+  'height': '18px',
+  'display': 'inline-block'
+};
+
 class Header extends Component {
   handleSignOutClick(event) {
     event.preventDefault();
@@ -52,7 +57,7 @@ class Header extends Component {
                 {currentUser ? (
                 <div>
                   <li style={liStyles}><Link to="/posts/new" className="button button-primary" style={newPostButtonStyles}>New post</Link></li>
-                  <li style={liStyles}>{currentUser.email} ● <a href='#' onClick={this.handleSignOutClick.bind(this)}>Sign out</a></li>
+                  <li style={liStyles}>{currentUser.email} ● <img style={gravatarStyles} src={currentUser.gravatar} /> ● <a href='#' onClick={this.handleSignOutClick.bind(this)}>Sign out</a></li>
                 </div>
                 ) :
                   <div>
