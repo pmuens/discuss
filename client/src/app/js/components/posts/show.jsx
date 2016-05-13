@@ -8,6 +8,7 @@ import _ from 'lodash';
 import TimeAgo from 'react-timeago';
 import MarkdownIt from 'markdown-it';
 import hljs from 'highlight.js';
+import Textarea from 'react-textarea-autosize';
 
 const postUlStyles = {
   marginBottom: '10px'
@@ -95,6 +96,8 @@ const timeAgoStyles = {
 
 const md = new MarkdownIt({
   linkify: true,
+  html: true,
+  breaks: true,
   highlight: (str, lang) => {
     if (lang && hljs.getLanguage(lang)) {
       try {
@@ -158,7 +161,7 @@ class PostsShow extends Component {
 
     const id = event.currentTarget.getAttribute('data-post-id');
     const title = this.refs.title.value;
-    const body = this.refs.body.value;
+    const body = this.refs.body.value.replace(/(?:\r\n|\r|\n)/g, '<br />');
 
     if (title.length !== 0 && body.length !== 0) {
       const post = {
@@ -256,7 +259,7 @@ class PostsShow extends Component {
                   {this.isCurrentUserPostAuthor(post) ? (
                     <p style={postBodyStyles} data-post-id={post.id}>
                       {editing ? (
-                        <textarea className="u-full-width" ref="body" defaultValue={post.body}/>
+                      <Textarea className="u-full-width" ref="body" defaultValue={post.body.replace(/<br\s*[\/]?>/gi, "\n")}></Textarea>
                       ) : <div dangerouslySetInnerHTML={{ __html: md.render(post.body) }}></div>}
                     </p>
                   ) : <p style={postBodyStyles}>{post.body}</p> }
