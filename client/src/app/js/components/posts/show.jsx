@@ -6,8 +6,6 @@ import { createComment, updateComment, deleteComment } from '../../actions/comme
 import { Link } from 'react-router';
 import _ from 'lodash';
 import TimeAgo from 'react-timeago';
-import MarkdownIt from 'markdown-it';
-import hljs from 'highlight.js';
 
 const postUlStyles = {
   marginBottom: '10px'
@@ -92,24 +90,6 @@ const timeAgoStyles = {
   color: '#B1B1B1',
   float: 'left'
 };
-
-const md = new MarkdownIt({
-  linkify: true,
-  highlight: (str, lang) => {
-    if (lang && hljs.getLanguage(lang)) {
-      try {
-        return (
-          '<pre><code class="hljs">' +
-          hljs.highlight(lang, str, true).value +
-          '</code></pre>'
-        )
-      } catch (__) {
-        // Don't fail
-      }
-    }
-    return `<pre><code class="hljs">${md.utils.escapeHtml(str)}</code></pre>`
-  },
-});
 
 class PostsShow extends Component {
   constructor(props) {
@@ -257,7 +237,7 @@ class PostsShow extends Component {
                     <p style={postBodyStyles} data-post-id={post.id}>
                       {editing ? (
                         <textarea className="u-full-width" ref="body" defaultValue={post.body}/>
-                      ) : <div dangerouslySetInnerHTML={{ __html: md.render(post.body) }}></div>}
+                      ) : post.body}
                     </p>
                   ) : <p style={postBodyStyles}>{post.body}</p> }
                   <hr style={hrStyles}/>
