@@ -3,14 +3,14 @@ import { Route, IndexRoute } from 'react-router';
 
 import App from './components/app';
 import PostsNew from './components/posts/new';
-import PostsIndex from './components/posts/index';
+import PostsContainer  from './containers/PostsContainer';
 import PostsShow from './components/posts/show';
 import SignUp from './components/users/sign-up';
 import SignIn from './components/users/sign-in';
 
 export default (
   <Route path="/" component={App}>
-    <IndexRoute component={PostsIndex} />
+    <IndexRoute component={PostsContainer} />
     <Route path="posts/new" component={PostsNew} />
     <Route path="posts/:id/show" component={PostsShow} />
     <Route path="sign-up" component={SignUp} />

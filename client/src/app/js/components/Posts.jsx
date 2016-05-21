@@ -1,12 +1,15 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { getPosts } from '../../actions/posts';
 import { Link } from 'react-router';
-import _ from 'lodash';
 import TimeAgo from 'react-timeago';
+import _ from 'lodash';
 
 const ulStyles = {
   marginBottom: '10px'
+};
+
+const noDataAvailableStyles = {
+  marginTop: '20px',
+  textAlign: 'center'
 };
 
 const liStyles = {
@@ -51,26 +54,21 @@ const clearStyles = {
   clear: 'both'
 };
 
-const noDataAvailableStyles = {
-  marginTop: '20px',
-  textAlign: 'center'
-};
-
 const gravatarStyles = {
   'height': '30px',
   'display': 'inline-block'
 };
 
-class PostsIndex extends Component {
-  componentWillMount() {
-    this.props.getPosts();
+export default class Posts extends Component {
+  constructor(props) {
+    super(props);
   }
 
   render() {
     const { posts } = this.props;
 
     const sortedPosts = posts.length ? _.orderBy(posts, 'createdAt', ['desc']) : [];
-    
+
     return (
       <div className="row">
         <div className="twelve columns">
@@ -82,9 +80,9 @@ class PostsIndex extends Component {
                     <h1 style={titleStyles}><Link to={`posts/${post.id}/show`} style={titleLinkStyles}>{post.title}</Link></h1>
                     <hr style={hrStyles}/>
                     <span style={commentsStyles}>{post.comments.length} Comment(s)</span>
-                    <span style={timeSeparatorStyles}>
-                      - <TimeAgo date={+post.createdAt} style={timeAgoStyles} />
-                    </span>
+                      <span style={timeSeparatorStyles}>
+                        - <TimeAgo date={+post.createdAt} style={timeAgoStyles} />
+                      </span>
                     <span style={authorStyles}><img style={gravatarStyles} src={post.author.gravatar} /> ● {post.author.username}</span>
                     <div style={clearStyles}></div>
                   </li>
@@ -94,12 +92,6 @@ class PostsIndex extends Component {
           ) : <div style={noDataAvailableStyles}>There are currently no posts available to display</div> }
         </div>
       </div>
-    );
+    )
   }
 }
-
-function mapStateToProps(state) {
-  return { posts: state.posts.posts };
-}
-
-export default connect(mapStateToProps, { getPosts })(PostsIndex);
