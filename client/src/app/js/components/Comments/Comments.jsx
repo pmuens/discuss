@@ -26,7 +26,7 @@ export default class Comments extends Component {
   }
 
   render() {
-    const { comments } = this.props;
+    const { comments, onUpdateComment, onDeleteComment } = this.props;
 
     const sortedComments = comments.length ? _.orderBy(comments, 'createdAt', ['desc']) : [];
 
@@ -46,6 +46,8 @@ export default class Comments extends Component {
                 key={`comment-${comment.id}`}
                 comment={ comment }
                 isAuthor={ this.isCurrentUserAuthor(comment.author.id) }
+                onUpdateComment={onUpdateComment}
+                onDeleteComment={onDeleteComment}
               />
             )
           })}

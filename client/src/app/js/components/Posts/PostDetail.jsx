@@ -133,10 +133,10 @@ export default class PostDetail extends Component {
                   {isAuthor ? (
                     editing ? (
                       <div>
-                        <button href="#" style={deletePostStyles} onClick={() => {this.setState({editing:false})}}>
+                        <button style={deletePostStyles} onClick={() => {this.setState({editing:false})}}>
                           <i className="fa fa-times"></i>
                         </button>
-                        <button href="#" style={editPostStyles} onClick={this.onUpdatePost.bind(this)}>
+                        <button style={editPostStyles} onClick={this.onUpdatePost.bind(this)}>
                           <i className="fa fa-check"></i>
                         </button>
                       </div>

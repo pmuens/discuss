@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { getPost, updatePost, deletePost } from '../../actions/posts';
+import { updateComment, deleteComment } from '../../actions/comments';
 import PostDetail from '../../components/Posts/PostDetail';
 import Comments from '../../components/Comments/Comments';
 import CommentNewContainer from '../../containers/Comments/CommentNewContainer';
@@ -42,6 +43,36 @@ class PostDetailContainer extends Component {
     }
   }
 
+  handleUpdateComment(comment) {
+    const id = comment.id;
+    const body = comment.body.replace(/(?:\r\n|\r|\n)/g, '<br />');
+
+    if (body.length !== 0) {
+      const comment = {
+        id: id,
+        body: body,
+        jwt: this.props.currentUser.jwt
+      };
+
+      this.props.updateComment(comment);
+    } else {
+      alert('You can not submit an empty body');
+    }
+  }
+
+  handleDeleteComment(comment) {
+    const id = comment.id;
+
+    if (confirm('Do you really want to delete this comment?')) {
+      const comment = {
+        id,
+        jwt: this.props.currentUser.jwt
+      };
+
+      this.props.deleteComment(comment);
+    }
+  }
+
   render() {
     const { post, comments, currentUser } = this.props;
 
@@ -60,6 +91,8 @@ class PostDetailContainer extends Component {
         <Comments
           comments={ comments }
           currentUser={ currentUser }
+          onUpdateComment={this.handleUpdateComment.bind(this)}
+          onDeleteComment={this.handleDeleteComment.bind(this)}
         />
       </div>
     );
@@ -77,5 +110,7 @@ function mapStateToProps(state) {
 export default connect(mapStateToProps, {
   getPost,
   updatePost,
-  deletePost
+  deletePost,
+  updateComment,
+  deleteComment
 })(PostDetailContainer);
