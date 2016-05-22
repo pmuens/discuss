@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { getPost, updatePost } from '../../actions/posts';
+import { getPost, updatePost, deletePost } from '../../actions/posts';
 import PostDetail from '../../components/Posts/PostDetail';
 import Comments from '../../components/Comments/Comments';
 import CommentNewContainer from '../../containers/Comments/CommentNewContainer';
@@ -29,6 +29,19 @@ class PostDetailContainer extends Component {
     }
   }
 
+  handleDeletePost(post) {
+    const id = this.props.params.id;
+
+    if (confirm('Do you really want to delete this post?')) {
+      const post = {
+        id,
+        jwt: this.props.currentUser.jwt
+      };
+
+      this.props.deletePost(post);
+    }
+  }
+
   render() {
     const { post, comments, currentUser } = this.props;
 
@@ -38,6 +51,7 @@ class PostDetailContainer extends Component {
           post={ post }
           isAuthor={ currentUser && post.author.id === currentUser.id }
           onUpdatePost={this.handleUpdatePost.bind(this)}
+          onDeletePost={this.handleDeletePost.bind(this)}
         />
         <CommentNewContainer
           post={ post }
@@ -62,5 +76,6 @@ function mapStateToProps(state) {
 
 export default connect(mapStateToProps, {
   getPost,
-  updatePost
+  updatePost,
+  deletePost
 })(PostDetailContainer);

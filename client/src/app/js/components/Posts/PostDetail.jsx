@@ -103,6 +103,11 @@ export default class PostDetail extends Component {
     this.props.post.body = this.state.body;
   }
 
+  onDeletePost(event) {
+    event.preventDefault();
+    this.props.onDeletePost(this.state);
+  }
+
   render() {
     const { post, isAuthor } = this.props;
     const { editing, title, body } = this.state;
@@ -137,7 +142,7 @@ export default class PostDetail extends Component {
                       </div>
                     ):(
                       <div>
-                        <button href="#" style={deletePostStyles}>
+                        <button href="#" style={deletePostStyles} onClick={this.onDeletePost.bind(this)}>
                           <i className="fa fa-trash"></i>
                         </button>
                         <button href="#" style={editPostStyles} onClick={() => {this.setState({editing:true})}}>
