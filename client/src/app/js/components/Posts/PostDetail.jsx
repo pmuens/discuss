@@ -100,7 +100,7 @@ export default class PostDetail extends Component {
 
     this.setState({editing: false});
     this.props.post.title = this.state.title;
-    this.props.post.body = this.state.body;
+    this.props.post.body = this.state.body.replace(/<br\s*[\/]?>/gi, "\n");
   }
 
   onDeletePost(event) {
@@ -111,6 +111,7 @@ export default class PostDetail extends Component {
   render() {
     const { post, isAuthor } = this.props;
     const { editing, title, body } = this.state;
+    post.body = post.body.replace(/<br\s*[\/]?>/gi, "\n");
 
     return (
       <div className="row">
@@ -127,13 +128,13 @@ export default class PostDetail extends Component {
                   <hr style={hrStyles}/>
                   {editing ? (
                     <textarea value={body} onChange={event => {this.setState({body: event.target.value})}} />
-                  ):<div dangerouslySetInnerHTML={{ __html: md.render(post.body.replace(/<br\s*[\/]?>/gi, "\n")) }}></div>}
+                  ):<div dangerouslySetInnerHTML={{ __html: md.render(post.body) }}></div>}
                   <hr style={hrStyles}/>
                   <TimeAgo date={+post.createdAt} style={timeAgoStyles}/>
                   {isAuthor ? (
                     editing ? (
                       <div>
-                        <button style={deletePostStyles} onClick={() => {this.setState({editing:false})}}>
+                        <button style={deletePostStyles} onClick={() => {this.setState({editing:false, body: post.body})}}>
                           <i className="fa fa-times"></i>
                         </button>
                         <button style={editPostStyles} onClick={this.onUpdatePost.bind(this)}>

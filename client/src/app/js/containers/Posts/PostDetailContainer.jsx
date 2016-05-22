@@ -76,6 +76,10 @@ class PostDetailContainer extends Component {
   render() {
     const { post, comments, currentUser } = this.props;
 
+    if(!post){
+      return <div>Loading...</div>
+    }
+
     return (
       <div>
         <PostDetail
