@@ -4,6 +4,7 @@ import TimeAgo from 'react-timeago';
 import _ from 'lodash';
 import MarkdownIt from 'markdown-it';
 import hljs from 'highlight.js';
+import Textarea from 'react-textarea-autosize';
 
 const hrStyles = {
   margin: '10px 0px'
@@ -112,7 +113,7 @@ export default class Comment extends Component {
       <li style={commentLiStyles}>
         <p style={commentBodyStyles}>
           {editing ? (
-            <textarea value={body} onChange={event => {this.setState({body: event.target.value})}} />
+            <Textarea className="u-full-width" value={body} onChange={event => {this.setState({body: event.target.value})}} />
           ):<div dangerouslySetInnerHTML={{ __html: md.render(comment.body) }}></div>}
         </p>
         <hr style={hrStyles}/>

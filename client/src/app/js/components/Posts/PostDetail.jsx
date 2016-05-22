@@ -87,9 +87,9 @@ export default class PostDetail extends Component {
     super(props);
     const { post } = this.props;
 
-    if(post){
-      this.state = { editing: false, title: post.title, body: post.body };
-    }else{
+    if (post) {
+      this.state = {editing: false, title: post.title, body: post.body};
+    } else {
       this.state = {editing: false, title: '', body: ''}
     }
   }
@@ -122,31 +122,34 @@ export default class PostDetail extends Component {
                 <li key={`post-${post.id}`} style={postLiStyles}>
                   <h1 style={postTitleStyles}>
                     {editing ? (
-                      <input type="text" value={title} onChange={event => {this.setState({title: event.target.value})}} />
-                    ):post.title}
+                      <input className="u-full-width" type="text" value={title}
+                             onChange={event => {this.setState({title: event.target.value})}}/>
+                    ) : post.title}
                   </h1>
                   <hr style={hrStyles}/>
                   {editing ? (
-                    <textarea value={body} onChange={event => {this.setState({body: event.target.value})}} />
-                  ):<div dangerouslySetInnerHTML={{ __html: md.render(post.body) }}></div>}
+                    <Textarea className="u-full-width" value={body}
+                              onChange={event => {this.setState({body: event.target.value})}}/>
+                  ) : <div dangerouslySetInnerHTML={{ __html: md.render(post.body) }}></div>}
                   <hr style={hrStyles}/>
                   <TimeAgo date={+post.createdAt} style={timeAgoStyles}/>
                   {isAuthor ? (
                     editing ? (
                       <div>
-                        <button style={deletePostStyles} onClick={() => {this.setState({editing:false, body: post.body})}}>
+                        <button style={deletePostStyles}
+                                onClick={() => {this.setState({editing:false, body: post.body})}}>
                           <i className="fa fa-times"></i>
                         </button>
                         <button style={editPostStyles} onClick={this.onUpdatePost.bind(this)}>
                           <i className="fa fa-check"></i>
                         </button>
                       </div>
-                    ):(
+                    ) : (
                       <div>
-                        <button href="#" style={deletePostStyles} onClick={this.onDeletePost.bind(this)}>
+                        <button style={deletePostStyles} onClick={this.onDeletePost.bind(this)}>
                           <i className="fa fa-trash"></i>
                         </button>
-                        <button href="#" style={editPostStyles} onClick={() => {this.setState({editing:true})}}>
+                        <button style={editPostStyles} onClick={() => {this.setState({editing:true})}}>
                           <i className="fa fa-pencil-square-o"></i>
                         </button>
                       </div>
