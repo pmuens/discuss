@@ -80,28 +80,38 @@ const md = new MarkdownIt({
 export default class Comment extends Component {
   constructor(props) {
     super(props);
-    const { comment } = this.props;
 
-    if(comment){
-      this.state = { editing: false, id: comment.id, body: comment.body };
-    }else{
-      this.state = { editing: false, id: '', body: '' }
-    }
+    this.state = { editing: false, body: '' }
+  }
+
+  onEditComment() {
+    const { comment } = this.props;
+    this.setState({editing: true, body: comment.body.replace(/<br\s*[\/]?>/gi, "\n")});
   }
 
   onUpdateComment(event) {
     event.preventDefault();
 
-    this.props.onUpdateComment(this.state);
+    const comment = {
+      id: this.props.comment.id,
+      body: this.state.body
+    }
+
+    this.props.onUpdateComment(comment);
 
     this.setState({editing: false});
-    this.props.comment.body = this.state.body.replace(/<br\s*[\/]?>/gi, "\n");;
+    this.props.comment.body = this.state.body.replace(/<br\s*[\/]?>/gi, "\n");
   }
 
   onDeleteComment(event) {
     event.preventDefault();
 
-    this.props.onDeleteComment(this.state);
+    const comment = {
+      id: this.props.comment.id,
+      body: this.state.body
+    };
+
+    this.props.onDeleteComment(comment);
   }
 
   render() {
@@ -133,7 +143,7 @@ export default class Comment extends Component {
               <button style={deleteCommentStyles} onClick={this.onDeleteComment.bind(this)}>
                 <i className="fa fa-trash"></i>
               </button>
-              <button style={updateCommentStyles} onClick={() => {this.setState({editing: true})}}>
+              <button style={updateCommentStyles} onClick={this.onEditComment.bind(this)}>
                 <i className="fa fa-pencil-square-o"></i>
               </button>
             </div>

@@ -85,13 +85,13 @@ const md = new MarkdownIt({
 export default class PostDetail extends Component {
   constructor(props) {
     super(props);
-    const { post } = this.props;
 
-    if (post) {
-      this.state = {editing: false, title: post.title, body: post.body};
-    } else {
-      this.state = {editing: false, title: '', body: ''}
-    }
+    this.state = {editing: false, title: '', body: ''};
+  }
+
+  onEditPost() {
+    const { post } = this.props;
+    this.setState({editing: true, title: post.title, body: post.body.replace(/<br\s*[\/]?>/gi, "\n")});
   }
 
   onUpdatePost(event) {
@@ -149,7 +149,7 @@ export default class PostDetail extends Component {
                         <button style={deletePostStyles} onClick={this.onDeletePost.bind(this)}>
                           <i className="fa fa-trash"></i>
                         </button>
-                        <button style={editPostStyles} onClick={() => {this.setState({editing:true})}}>
+                        <button style={editPostStyles} onClick={this.onEditPost.bind(this)}>
                           <i className="fa fa-pencil-square-o"></i>
                         </button>
                       </div>
