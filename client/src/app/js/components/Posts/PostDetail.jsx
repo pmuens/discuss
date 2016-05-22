@@ -85,10 +85,27 @@ const md = new MarkdownIt({
 export default class PostDetail extends Component {
   constructor(props) {
     super(props);
+    const { post } = this.props;
+
+    if(post){
+      this.state = { editing: false, title: post.title, body: post.body };
+    }else{
+      this.state = {editing: false, title: '', body: ''}
+    }
+  }
+
+  onUpdatePost(event) {
+    event.preventDefault();
+    this.props.onUpdatePost(this.state);
+
+    this.setState({editing: false});
+    this.props.post.title = this.state.title;
+    this.props.post.body = this.state.body;
   }
 
   render() {
     const { post, isAuthor } = this.props;
+    const { editing, title, body } = this.state;
 
     return (
       <div className="row">
@@ -97,22 +114,37 @@ export default class PostDetail extends Component {
             <div>
               <ul style={postUlStyles}>
                 <li key={`post-${post.id}`} style={postLiStyles}>
-                  <h1 style={postTitleStyles}>{post.title}</h1>
+                  <h1 style={postTitleStyles}>
+                    {editing ? (
+                      <input type="text" value={title} onChange={event => {this.setState({title: event.target.value})}} />
+                    ):post.title}
+                  </h1>
                   <hr style={hrStyles}/>
-                  <div dangerouslySetInnerHTML={{ __html: md.render(post.body) }}></div>
+                  {editing ? (
+                    <textarea value={body} onChange={event => {this.setState({body: event.target.value})}} />
+                  ):<div dangerouslySetInnerHTML={{ __html: md.render(post.body.replace(/<br\s*[\/]?>/gi, "\n")) }}></div>}
                   <hr style={hrStyles}/>
                   <TimeAgo date={+post.createdAt} style={timeAgoStyles}/>
                   {isAuthor ? (
-                    <div>
-                      <a href="#" style={deletePostStyles} data-post-id={post.id}
-                      >
-                        <i className="fa fa-trash"></i>
-                      </a>
-                      <a href="#" style={editPostStyles} data-post-id={post.id}
-                      >
-                        <i className="fa fa-pencil-square-o"></i>
-                      </a>
-                    </div>
+                    editing ? (
+                      <div>
+                        <button href="#" style={deletePostStyles} onClick={() => {this.setState({editing:false})}}>
+                          <i className="fa fa-times"></i>
+                        </button>
+                        <button href="#" style={editPostStyles} onClick={this.onUpdatePost.bind(this)}>
+                          <i className="fa fa-check"></i>
+                        </button>
+                      </div>
+                    ):(
+                      <div>
+                        <button href="#" style={deletePostStyles}>
+                          <i className="fa fa-trash"></i>
+                        </button>
+                        <button href="#" style={editPostStyles} onClick={() => {this.setState({editing:true})}}>
+                          <i className="fa fa-pencil-square-o"></i>
+                        </button>
+                      </div>
+                    )
                   ) : null}
                   <span style={postAuthorStyles}><img style={gravatarStyles}
                                                       src={post.author.gravatar}/> ● {post.author.username}</span>
