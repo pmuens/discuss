@@ -75,18 +75,26 @@ export default class Posts extends Component {
           {sortedPosts.length ? (
             <ul style={ulStyles}>
               {sortedPosts.map((post) => {
-                return (
-                  <li key={`post-${post.id}`} style={liStyles}>
-                    <h1 style={titleStyles}><Link to={`posts/${post.id}/show`} style={titleLinkStyles}>{post.title}</Link></h1>
-                    <hr style={hrStyles}/>
-                    <span style={commentsStyles}>{post.comments.length} Comment(s)</span>
+                  return (
+                    <li key={`post-${post.id}`} style={liStyles}>
+                      <h1 style={titleStyles}>
+                        <Link to={`posts/${post.id}/show`}
+                              style={titleLinkStyles}>{post.title}
+                        </Link>
+                      </h1>
+                      <hr style={hrStyles}/>
+                      <span style={commentsStyles}>{post.comments.length} Comment(s)</span>
                       <span style={timeSeparatorStyles}>
-                        - <TimeAgo date={+post.createdAt} style={timeAgoStyles} />
+                        - <TimeAgo date={+post.createdAt} style={timeAgoStyles}/>
                       </span>
-                    <span style={authorStyles}><img style={gravatarStyles} src={post.author.gravatar} /> ● {post.author.username}</span>
-                    <div style={clearStyles}></div>
-                  </li>
-                )}
+                      <span style={authorStyles}>
+                        <img style={gravatarStyles}
+                             src={post.author.gravatar}/> ● {post.author.username}
+                      </span>
+                      <div style={clearStyles}></div>
+                    </li>
+                  )
+                }
               )}
             </ul>
           ) : <div style={noDataAvailableStyles}>There are currently no posts available to display</div> }

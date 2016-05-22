@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { getPosts } from '../actions/posts';
-import Posts from '../components/Posts';
+import { getPosts } from '../../actions/posts';
+import Posts from '../../components/Posts/Posts';
 
 class PostsContainer extends Component {
   componentWillMount() {
@@ -11,13 +11,13 @@ class PostsContainer extends Component {
   render() {
     const { posts } = this.props;
     return (
-      <Posts posts={ posts } />
+      <Posts posts={ posts }/>
     );
   }
 }
 
 function mapStateToProps(state) {
-  return { posts: state.posts.posts };
+  return {posts: state.posts.posts};
 }
 
-export default connect(mapStateToProps, { getPosts })(PostsContainer);
+export default connect(mapStateToProps, {getPosts})(PostsContainer);
