@@ -2,9 +2,9 @@ import React from 'react';
 import { Route, IndexRoute } from 'react-router';
 
 import App from './components/app';
-import PostsIndex  from './containers/Posts/PostsContainer';
-import PostDetail from './containers/Posts/PostDetailContainer';
-import PostNew from './containers/Posts/PostNewContainer';
+import PostsIndex  from './containers/posts/PostsContainer';
+import PostDetail from './containers/posts/PostDetailContainer';
+import PostNew from './containers/posts/PostNewContainer';
 import SignUp from './components/users/sign-up';
 import SignIn from './components/users/sign-in';
 

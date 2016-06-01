@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createComment } from '../../actions/comments';
-import CommentForm from '../../components/Comments/CommentForm';
+import CommentForm from '../../components/comments/CommentForm';
 
 class CommentNewContainer extends Component {
   constructor(props) {
