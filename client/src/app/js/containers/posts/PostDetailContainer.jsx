@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { getPost, updatePost, deletePost } from '../../actions/posts';
 import { updateComment, deleteComment } from '../../actions/comments';
-import PostDetail from '../../components/Posts/PostDetail';
-import Comments from '../../components/Comments/Comments';
-import CommentNewContainer from '../../containers/Comments/CommentNewContainer';
+import PostDetail from '../../components/posts/PostDetail';
+import Comments from '../../components/comments/Comments';
+import CommentNewContainer from '../../containers/comments/CommentNewContainer';
 
 class PostDetailContainer extends Component {
   componentWillMount() {

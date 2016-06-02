@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createPost } from '../../actions/posts';
-import PostForm from '../../components/Posts/PostForm';
+import PostForm from '../../components/posts/PostForm';
 
 class PostNewContainer extends Component {
   handleCreatePost(post) {
