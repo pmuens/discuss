@@ -51,7 +51,7 @@ Table of contents
 
 3. Run `npm start` (in the client/src folder) to run the client locally. The client is available in your browser at `http://localhost:8080/`
 
-4. Run `npm run build` to build the client
+4. Edit ```s-project.json``` and change ```bucketName```.  Run `npm run build` to build the client
 
 5. Run `serverless client deploy` to host the frontend with the help of an S3 bucket
 
